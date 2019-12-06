@@ -1,6 +1,6 @@
 package com.lukaszstachnik;
 
-public class Gwiazdozbior {
+public class Constellation {
     public String getNazwa() {
         return nazwa;
     }
@@ -10,7 +10,7 @@ public class Gwiazdozbior {
     }
 
     private String nazwa;
-    public Gwiazdozbior(String nazwa){
+    public Constellation(String nazwa){
         this.nazwa = nazwa;
     }
 }
