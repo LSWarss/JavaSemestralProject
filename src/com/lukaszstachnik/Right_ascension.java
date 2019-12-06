@@ -1,6 +1,8 @@
 package com.lukaszstachnik;
 
-public class Right_ascension {
+import java.io.Serializable;
+
+public class Right_ascension implements Serializable {
     public int getXx() {
         return xx;
     }

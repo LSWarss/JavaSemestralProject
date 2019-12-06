@@ -1,6 +1,8 @@
 package com.lukaszstachnik;
 
-public class Declination {
+import java.io.Serializable;
+
+public class Declination implements Serializable {
     public int getXx() {
         return xx;
     }

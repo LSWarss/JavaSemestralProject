@@ -1,6 +1,8 @@
 package com.lukaszstachnik;
 
-public enum GreekAlphabet {
+import java.io.Serializable;
+
+public enum GreekAlphabet implements Serializable {
     alpha,
     beta,
     gamma,

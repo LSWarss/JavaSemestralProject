@@ -1,6 +1,8 @@
 package com.lukaszstachnik;
 
-public class Constellation {
+import java.io.Serializable;
+
+public class Constellation implements Serializable {
     public String getNazwa() {
         return nazwa;
     }

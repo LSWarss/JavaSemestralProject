@@ -4,6 +4,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class Star implements Serializable {
@@ -18,6 +20,8 @@ public class Star implements Serializable {
     private double absolute_magnitude;
     private double temperature;
     private double mass;
+
+    private static List<GreekAlphabet> greekLetters = Arrays.asList(GreekAlphabet.values());
 
     public String getName() {
         return name;
@@ -69,7 +73,7 @@ public class Star implements Serializable {
         }
         else if(!constellationExist){
             try{
-                ObjectOutputStream saveStream = new ObjectOutputStream(new FileOutputStream("Constellations\\" + constellation.getNazwa() + ".obj"));
+                ObjectOutputStream saveStream = new ObjectOutputStream(new FileOutputStream("src\\Constellations\\" + constellation.getNazwa() + ".obj"));
                 saveStream.writeObject(constellation);
             }
             catch (IOException e){
@@ -82,18 +86,38 @@ public class Star implements Serializable {
         return catalogueName;
     }
 
-    public void setCatalogueName(String catalogueName) {
+    public void setCatalogueName() {
+        Object obj;
+        String catalogueName = null;
+
         try {
-            File baseFolder = new File("Stars"); //Method for checking if the files with catalogueName exist, and if not it will create one
+            File baseFolder = new File("src/Stars"); //Method for checking if the files with catalogueName exist, and if not it will create one
             File[] files = baseFolder.listFiles();
             for (File f : files) {
                 if (!f.isDirectory()) {
-                    // tu
+                    ObjectInputStream fileLoading = new ObjectInputStream(new FileInputStream(f));
+                    while((obj = fileLoading.readObject()) != null){
+                        if(obj instanceof Star){
+                            if(((Star)obj).getConstellation() == constellation){
+                                for(int i = 0; i < greekLetters.size(); i++){
+                                    if(((Star)obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
+                                        this.catalogueName = greekLetters.get(i+1) + constellation.getNazwa();
+                                        break;
+                                    }
+                                    else if(!((Star)obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
+                                        this.catalogueName = greekLetters.get(i) + constellation.getNazwa();
+                                        break;
+                                    }
+                                }
+                            }
+                            else if(((Star)obj).getConstellation() != constellation){
+                                this.catalogueName = greekLetters.get(0) + constellation.getNazwa();
+                            }
+                        }
+                    }
                 }
             }
-        }
-        catch(NullPointerException e)
-        {
+        } catch(NullPointerException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -126,7 +150,7 @@ public class Star implements Serializable {
             else if(declination.getZz() > 60.00){
                 declination.setYy(declination.getYy() + 1);
             }
-            else {
+            else if(declination.getXx() < 90 || declination.getXx() > 0) {
                 this.declination = declination;
             }
         }
@@ -138,7 +162,7 @@ public class Star implements Serializable {
                 declination.setXx(declination.getXx() + 1);
             } else if (declination.getZz() > 60.00) {
                 declination.setYy(declination.getYy() + 1);
-            } else {
+            } else if(declination.getXx() > -90 || declination.getXx() < 0){
                 this.declination = declination;
             }
         }
@@ -218,5 +242,31 @@ public class Star implements Serializable {
             throw new Exception("Wrong mass ( mass value can be in range from 0.1 to 50 in reference to sun");
         }
     }
+
+    public Star(String name, Constellation constellation, String hemisphere, Declination declination, Right_ascension right_ascension, double apperent_magnitude, double distance, double temperature, double mass) throws Exception {
+        setName(name);
+        setConstellation(constellation);
+        setCatalogueName();
+        setHemisphere(hemisphere);
+        setDeclination(declination);
+        setRight_ascension(right_ascension);
+        setApperent_magnitude(apperent_magnitude);
+        setDistance(distance);
+        setAbsolute_magnitude();
+        setTemperature(temperature);
+        setMass(mass);
+
+    }
+
+    public static void SerialiseStar(Star star) {
+        try {
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream( "src\\Stars\\" + star.getName() + ".obj"));
+            outputStream.writeObject(star);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
