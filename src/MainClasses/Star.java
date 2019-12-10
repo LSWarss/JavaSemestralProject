@@ -89,8 +89,6 @@ public class Star implements Serializable {
 
     public void setCatalogueName() {
         Object obj;
-        String catalogueName = null;
-
         try {
             File baseFolder = new File("src\\Stars"); //Method for checking if the files with catalogueName exist, and if not it will create one
             File[] files = baseFolder.listFiles();
@@ -103,7 +101,6 @@ public class Star implements Serializable {
                                 for(int i = 0; i < greekLetters.size(); i++){
                                     if(((Star)obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
                                         this.catalogueName = greekLetters.get(i+1) + constellation.getNazwa();
-
                                         break;
                                     }
                                     else if(!((Star)obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
