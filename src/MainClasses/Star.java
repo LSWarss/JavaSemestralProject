@@ -1,4 +1,4 @@
-package com.lukaszstachnik;
+package MainClasses;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -54,12 +54,12 @@ public class Star implements Serializable {
 
     private void setConstellation(Constellation constellation) {
         Object obj;
-        File constellationFile = new File(constellation.getNazwa() + ".obj");
+        File constellationFile = new File("src\\Constellations\\" + constellation.getNazwa() + ".obj");
         boolean constellationExist = constellationFile.exists();
 
-        if(constellationExist) {
+        if(constellationExist == true) {
             try {
-                ObjectInputStream loadStream = new ObjectInputStream(new FileInputStream("Constellations\\" + constellation.getNazwa() + ".obj"));
+                ObjectInputStream loadStream = new ObjectInputStream(new FileInputStream("src\\Constellations\\" + constellation.getNazwa() + ".obj"));
                 while ((obj = loadStream.readObject()) != null) {
                     if (obj instanceof Constellation && ((Constellation) obj).getNazwa().equals(constellation.getNazwa())) {
                         this.constellation = constellation;
@@ -71,10 +71,11 @@ public class Star implements Serializable {
                 e.printStackTrace();
             }
         }
-        else if(!constellationExist){
+        else if(constellationExist == false){
             try{
                 ObjectOutputStream saveStream = new ObjectOutputStream(new FileOutputStream("src\\Constellations\\" + constellation.getNazwa() + ".obj"));
                 saveStream.writeObject(constellation);
+                this.constellation = constellation;
             }
             catch (IOException e){
                 e.printStackTrace();
@@ -91,17 +92,18 @@ public class Star implements Serializable {
         String catalogueName = null;
 
         try {
-            File baseFolder = new File("src/Stars"); //Method for checking if the files with catalogueName exist, and if not it will create one
+            File baseFolder = new File("src\\Stars"); //Method for checking if the files with catalogueName exist, and if not it will create one
             File[] files = baseFolder.listFiles();
             for (File f : files) {
                 if (!f.isDirectory()) {
                     ObjectInputStream fileLoading = new ObjectInputStream(new FileInputStream(f));
-                    while((obj = fileLoading.readObject()) != null){
+                    obj = fileLoading.readObject();
                         if(obj instanceof Star){
-                            if(((Star)obj).getConstellation() == constellation){
+                            if(((Star)obj).getConstellation() == this.constellation){
                                 for(int i = 0; i < greekLetters.size(); i++){
                                     if(((Star)obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
                                         this.catalogueName = greekLetters.get(i+1) + constellation.getNazwa();
+
                                         break;
                                     }
                                     else if(!((Star)obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
@@ -110,13 +112,12 @@ public class Star implements Serializable {
                                     }
                                 }
                             }
-                            else if(((Star)obj).getConstellation() != constellation){
+                            if(((Star)obj).getConstellation() != constellation){
                                 this.catalogueName = greekLetters.get(0) + constellation.getNazwa();
                             }
                         }
                     }
                 }
-            }
         } catch(NullPointerException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -255,7 +256,6 @@ public class Star implements Serializable {
         setAbsolute_magnitude();
         setTemperature(temperature);
         setMass(mass);
-
     }
 
     public static void SerialiseStar(Star star) {
