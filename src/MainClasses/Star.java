@@ -20,6 +20,7 @@ public class Star implements Serializable {
     private double absolute_magnitude;
     private double temperature;
     private double mass;
+    private static final long serialVersionUID = 161624711068037245L;
 
     private static List<GreekAlphabet> greekLetters = Arrays.asList(GreekAlphabet.values());
 
@@ -317,4 +318,160 @@ public class Star implements Serializable {
             e.printStackTrace();
         }
     }
+
+    public static void DeleteStar(String catalogueName) {
+        Object object;
+        File baseFolder = new File("src\\Stars");
+        File[] files = baseFolder.listFiles();
+        try {
+            for (File f : files) {
+                if (!f.isDirectory()) {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));
+                    object = objectInputStream.readObject();
+                    if(object instanceof Star){
+                        if(((Star) object).getCatalogueName().equals(catalogueName)){
+                            f.deleteOnExit();
+                            break;
+                        }
+                        else{
+                            System.out.println("There is no star with such catalogue name to delete");
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void showStarsConstellationWise(Constellation constellation){
+        Object object;
+        File baseFolder = new File("src\\Stars");
+        File[] files = baseFolder.listFiles();
+        try {
+            for (File f : files) {
+                if (!f.isDirectory()) {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));
+                    object = objectInputStream.readObject();
+                    if(object instanceof Star) {
+                        if (((Star) object).getConstellation().getNazwa().equals(constellation.getNazwa())) {
+                            System.out.println(((Star) object).getName());
+
+                        }
+                    }
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void showStarsDistanceWise(double distance){
+        Object object;
+        File baseFolder = new File("src\\Stars");
+        File[] files = baseFolder.listFiles();
+        try {
+            for (File f : files) {
+                if (!f.isDirectory()) {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));
+                    object = objectInputStream.readObject();
+                    if(object instanceof Star) {
+                        if (((Star) object).getDistance() == distance){
+                            System.out.println(((Star) object).getName());
+                        }
+                    }
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void showStarsTemperatureWise(double lowerTemperature, double upperTemperature){
+        Object object;
+        File baseFolder = new File("src\\Stars");
+        File[] files = baseFolder.listFiles();
+        try {
+            for (File f : files) {
+                if (!f.isDirectory()) {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));
+                    object = objectInputStream.readObject();
+                    if(object instanceof Star) {
+                        if (((Star) object).getTemperature() >= lowerTemperature && ((Star) object).getTemperature() <= upperTemperature){
+                            System.out.println(((Star) object).getName());
+                        }
+                    }
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void showStarsMagnitudeWise(double lowerMagnitude, double upperMagnitude){
+        Object object;
+        File baseFolder = new File("src\\Stars");
+        File[] files = baseFolder.listFiles();
+        try {
+            for (File f : files) {
+                if (!f.isDirectory()) {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));
+                    object = objectInputStream.readObject();
+                    if(object instanceof Star) {
+                        if (((Star) object).getTemperature() >= lowerMagnitude && ((Star) object).getTemperature() <= upperMagnitude){
+                            System.out.println(((Star) object).getName());
+                        }
+                    }
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void showStarsHemisphereWise(String hemisphere){
+        Object object;
+        File baseFolder = new File("src\\Stars");
+        File[] files = baseFolder.listFiles();
+        try {
+            for (File f : files) {
+                if (!f.isDirectory()) {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));
+                    object = objectInputStream.readObject();
+                    if(object instanceof Star) {
+                        if (((Star) object).getHemisphere().equals(hemisphere)){
+                            System.out.println(((Star) object).getName());
+                        }
+                    }
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void showStarsMassWise(){
+        Object object;
+        File baseFolder = new File("src\\Stars");
+        File[] files = baseFolder.listFiles();
+        try {
+            for (File f : files) {
+                if (!f.isDirectory()) {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));
+                    object = objectInputStream.readObject();
+                    if(object instanceof Star) {
+                        if (((Star) object).getMass() > 1.44){
+                            System.out.println(((Star) object).getName());
+                        }
+                    }
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     }
