@@ -89,6 +89,7 @@ public class Star implements Serializable {
 
     public void setCatalogueName() {
         StringBuffer catalogueTry = new StringBuffer();
+        catalogueName = greekLetters.get(0) + constellation.getNazwa();
         Object obj;
         try {
             File baseFolder = new File("src\\Stars"); //Method for checking if the files with catalogueName exist, and if not it will create one
@@ -100,11 +101,21 @@ public class Star implements Serializable {
                         if(obj instanceof Star){
                             if(((Star) obj).getConstellation().getNazwa().equals(getConstellation().getNazwa())){
                                    for(int i = 0; i < greekLetters.size(); i++){
-                                       if(((Star) obj).getCatalogueName() != null && ((Star) obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
+                                       if(((Star) obj).getName().equals(this.name) && ((Star) obj).getCatalogueName() != null && ((Star) obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
+                                           catalogueTry = new StringBuffer(((Star) obj).getCatalogueName());
+                                           this.catalogueName = catalogueTry.toString();
+                                           break;
+                                       }
+                                       else if(((Star) obj).getCatalogueName() != null && ((Star) obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
                                            catalogueTry = new StringBuffer(greekLetters.get(i + 1) + constellation.getNazwa());
                                            this.catalogueName = catalogueTry.toString();
                                            break;
                                        }
+//                                       else if(((Star) obj).getCatalogueName() == null){
+//                                           catalogueTry = new StringBuffer(greekLetters.get(i) + constellation.getNazwa());
+//                                           this.catalogueName = catalogueTry.toString();
+//                                           break;
+//                                       }
                                        else{
                                            catalogueTry = new StringBuffer(greekLetters.get(i) + constellation.getNazwa());
                                            this.catalogueName = catalogueTry.toString();
@@ -271,6 +282,24 @@ public class Star implements Serializable {
             outputStream.writeObject(star);
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void DeserializeStar(String starName){
+        try{
+            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("src\\Stars\\" + starName + ".obj"));
+            Object obj = inputStream.readObject();
+            if(obj instanceof Star){
+                System.out.println(((Star) obj).getName());
+                System.out.println(((Star) obj).getConstellation().getNazwa());
+                System.out.println(((Star) obj).getCatalogueName());
+                System.out.println(((Star) obj).getHemisphere());
+
+            }
+
+
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
