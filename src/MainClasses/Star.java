@@ -88,6 +88,7 @@ public class Star implements Serializable {
     }
 
     public void setCatalogueName() {
+        StringBuffer catalogueTry = new StringBuffer();
         Object obj;
         try {
             File baseFolder = new File("src\\Stars"); //Method for checking if the files with catalogueName exist, and if not it will create one
@@ -97,27 +98,36 @@ public class Star implements Serializable {
                     ObjectInputStream fileLoading = new ObjectInputStream(new FileInputStream(f));
                     obj = fileLoading.readObject();
                         if(obj instanceof Star){
-                            if(((Star)obj).getConstellation() == this.constellation){
-                                for(int i = 0; i < greekLetters.size(); i++){
-                                    if(((Star)obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
-                                        this.catalogueName = greekLetters.get(i+1) + constellation.getNazwa();
-                                        break;
-                                    }
-                                    else if(!((Star)obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
-                                        this.catalogueName = greekLetters.get(i) + constellation.getNazwa();
-                                        break;
-                                    }
-                                }
+                            if(((Star) obj).getConstellation().getNazwa().equals(getConstellation().getNazwa())){
+                                   for(int i = 0; i < greekLetters.size(); i++){
+                                       if(((Star) obj).getCatalogueName() != null && ((Star) obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
+                                           catalogueTry = new StringBuffer(greekLetters.get(i + 1) + constellation.getNazwa());
+                                           this.catalogueName = catalogueTry.toString();
+                                           break;
+                                       }
+                                       else{
+                                           catalogueTry = new StringBuffer(greekLetters.get(i) + constellation.getNazwa());
+                                           this.catalogueName = catalogueTry.toString();
+                                           break;
+                                       }
+                                   }
                             }
-                            if(((Star)obj).getConstellation() != constellation){
-                                this.catalogueName = greekLetters.get(0) + constellation.getNazwa();
+                            else {
+                                catalogueTry.append(greekLetters.get(0)).append(constellation.getNazwa());
+                                this.catalogueName = catalogueTry.toString();
                             }
+
                         }
                     }
+
                 }
-        } catch(NullPointerException | IOException | ClassNotFoundException e) {
+
+        } catch(IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+
+
     }
 
     public String getHemisphere() {
@@ -192,7 +202,7 @@ public class Star implements Serializable {
 
     private void setApperent_magnitude(double apperent_magnitude) throws Exception {
         if(apperent_magnitude > -26.74 && apperent_magnitude < 15.0){
-            this.absolute_magnitude = apperent_magnitude;
+            this.apperent_magnitude = apperent_magnitude;
         }
         else{
             throw new Exception("Wrong value for the apperent_magnitude (it takes only values between -26.74 and 15.0");
@@ -212,7 +222,7 @@ public class Star implements Serializable {
     }
 
     private void setAbsolute_magnitude() {
-        this.absolute_magnitude = getApperent_magnitude() - (5 * Math.log10(distance * 3.26));
+        this.absolute_magnitude = getAbsolute_magnitude() - (5 * Math.log10(distance * 3.26));
     }
 
     public double getTemperature() {
