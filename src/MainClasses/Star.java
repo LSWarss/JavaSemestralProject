@@ -111,11 +111,6 @@ public class Star implements Serializable {
                                            this.catalogueName = catalogueTry.toString();
                                            break;
                                        }
-//                                       else if(((Star) obj).getCatalogueName() == null){
-//                                           catalogueTry = new StringBuffer(greekLetters.get(i) + constellation.getNazwa());
-//                                           this.catalogueName = catalogueTry.toString();
-//                                           break;
-//                                       }
                                        else{
                                            catalogueTry = new StringBuffer(greekLetters.get(i) + constellation.getNazwa());
                                            this.catalogueName = catalogueTry.toString();
@@ -304,5 +299,22 @@ public class Star implements Serializable {
         }
     }
 
-
-}
+    public static void ShowAllStars() {
+        Object object;
+        File baseFolder = new File("src\\Stars");
+        File[] files = baseFolder.listFiles();
+        try {
+            for (File f : files) {
+                if (!f.isDirectory()) {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));
+                    object = objectInputStream.readObject();
+                    if(object instanceof Star){
+                        System.out.println(((Star) object).getName());
+                    }
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    }
