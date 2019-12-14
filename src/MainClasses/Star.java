@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class Star implements Serializable {
+public class Star implements Serializable { //Main project class
     private String name;
     private Constellation constellation;
     private String catalogueName;
@@ -20,9 +20,9 @@ public class Star implements Serializable {
     private double absolute_magnitude;
     private double temperature;
     private double mass;
-    private static final long serialVersionUID = 161624711068037245L;
+    private static final long serialVersionUID = 161624711068037245L; //used for serialization because of problems when changing stuff in the files
 
-    private static List<GreekAlphabet> greekLetters = Arrays.asList(GreekAlphabet.values());
+    private static List<GreekAlphabet> greekLetters = Arrays.asList(GreekAlphabet.values()); //list containing all greek letters from the greek letters enum, for simpler creation of catalogue name
 
     public String getName() {
         return name;
@@ -47,7 +47,7 @@ public class Star implements Serializable {
         else{
             this.name = name;
         }
-    }
+    } // setter for Name it checks if there are 3 Uppercase letters and 4 number, else it just throws exception
 
     public Constellation getConstellation() {
         return constellation;
@@ -71,7 +71,7 @@ public class Star implements Serializable {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        }
+        } // if constellation exist in the constellations folder and it match the constellation in the constructor of the class object it takes this constellation as the constellation field
         else if(constellationExist == false){
             try{
                 ObjectOutputStream saveStream = new ObjectOutputStream(new FileOutputStream("src\\Constellations\\" + constellation.getNazwa() + ".obj"));
@@ -81,7 +81,7 @@ public class Star implements Serializable {
             catch (IOException e){
                 e.printStackTrace();
             }
-        }
+        } // if the constellation doesn't exist it creates the one of that kind and serialize it, then it takes it as the field for our class object
     }
 
     public String getCatalogueName() {
@@ -101,22 +101,22 @@ public class Star implements Serializable {
                     obj = fileLoading.readObject();
                         if(obj instanceof Star){
                             if(((Star) obj).getConstellation().getNazwa().equals(getConstellation().getNazwa())){
-                                   for(int i = 0; i < greekLetters.size(); i++){
+                                   for(int i = 0; i < greekLetters.size(); i++){ //for loop that will go through the greek letters list
                                        if(((Star) obj).getName().equals(this.name) && ((Star) obj).getCatalogueName() != null && ((Star) obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
                                            catalogueTry = new StringBuffer(((Star) obj).getCatalogueName());
                                            this.catalogueName = catalogueTry.toString();
                                            break;
-                                       }
+                                       }//if the name of the star equals the name of created object, and it's constellation name is not null, and if it's the i letter of alphabet it just save it as it is
                                        else if(((Star) obj).getCatalogueName() != null && ((Star) obj).getCatalogueName().equals(greekLetters.get(i) + constellation.getNazwa())){
                                            catalogueTry = new StringBuffer(greekLetters.get(i + 1) + constellation.getNazwa());
                                            this.catalogueName = catalogueTry.toString();
                                            break;
-                                       }
+                                       }//else if there is object with that name it iterate one word in list and creates an new unique catalogue name
                                        else{
                                            catalogueTry = new StringBuffer(greekLetters.get(i) + constellation.getNazwa());
                                            this.catalogueName = catalogueTry.toString();
                                            break;
-                                       }
+                                       }//else it just makes the first instance of this catalogue name in the constellation
                                    }
                             }
                             else {
@@ -320,7 +320,7 @@ public class Star implements Serializable {
     }
 
     public static void DeleteStar(String catalogueName) {
-        Object object;
+        Object object, obj;
         File baseFolder = new File("src\\Stars");
         File[] files = baseFolder.listFiles();
         try {
@@ -330,7 +330,16 @@ public class Star implements Serializable {
                     object = objectInputStream.readObject();
                     if(object instanceof Star){
                         if(((Star) object).getCatalogueName().equals(catalogueName)){
-                            f.deleteOnExit();
+                            Files.delete(Paths.get("src\\Stars\\" + ((Star) object).name + ".obj"));
+                            for(File file : files){
+                                if(!f.isDirectory()){
+                                    ObjectInputStream objInputStream1 = new ObjectInputStream(new FileInputStream(f));
+                                    obj = objInputStream1.readObject();
+                                    if(obj instanceof Star){
+                                        ((Star) obj).setCatalogueName();
+                                    }
+                                }
+                            }
                             break;
                         }
                         else{
@@ -340,6 +349,8 @@ public class Star implements Serializable {
                     }
                 }
             }
+
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
