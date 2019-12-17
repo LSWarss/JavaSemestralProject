@@ -276,6 +276,7 @@ public class Star implements Serializable { //Main project class
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream( "src\\Stars\\" + star.getName() + ".obj"));
             outputStream.writeObject(star);
+            outputStream.close();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -293,8 +294,7 @@ public class Star implements Serializable { //Main project class
                 System.out.println(((Star) obj).getHemisphere());
 
             }
-
-
+            inputStream.close();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -312,7 +312,9 @@ public class Star implements Serializable { //Main project class
                     if(object instanceof Star){
                         System.out.println(((Star) object).getName());
                     }
+                    objectInputStream.close();
                 }
+
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -330,6 +332,7 @@ public class Star implements Serializable { //Main project class
                     object = objectInputStream.readObject();
                     if(object instanceof Star){
                         if(((Star) object).getCatalogueName().equals(catalogueName)){
+                            objectInputStream.close();
                             Files.delete(Paths.get("src\\Stars\\" + ((Star) object).name + ".obj"));
                             for(File file : files){
                                 if(!f.isDirectory()){
@@ -338,6 +341,7 @@ public class Star implements Serializable { //Main project class
                                     if(obj instanceof Star){
                                         ((Star) obj).setCatalogueName();
                                     }
+                                    objInputStream1.close();
                                 }
                             }
                             break;
@@ -347,6 +351,7 @@ public class Star implements Serializable { //Main project class
                             break;
                         }
                     }
+
                 }
             }
 
@@ -371,6 +376,7 @@ public class Star implements Serializable { //Main project class
 
                         }
                     }
+                    objectInputStream.close();
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -392,7 +398,9 @@ public class Star implements Serializable { //Main project class
                             System.out.println(((Star) object).getName());
                         }
                     }
+                    objectInputStream.close();
                 }
+
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -413,6 +421,7 @@ public class Star implements Serializable { //Main project class
                             System.out.println(((Star) object).getName());
                         }
                     }
+                    objectInputStream.close();
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -434,6 +443,7 @@ public class Star implements Serializable { //Main project class
                             System.out.println(((Star) object).getName());
                         }
                     }
+                    objectInputStream.close();
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -455,6 +465,7 @@ public class Star implements Serializable { //Main project class
                             System.out.println(((Star) object).getName());
                         }
                     }
+                    objectInputStream.close();
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -476,6 +487,7 @@ public class Star implements Serializable { //Main project class
                             System.out.println(((Star) object).getName());
                         }
                     }
+                    objectInputStream.close();
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
